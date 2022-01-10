@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        
+        <!-- Nuget Package properties -->
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>TheWorldFastest.TestClass</PackageId>
+        <Authors>Sörnt Poppe</Authors>
+        <PackageTitle>TheWorldFastest.TestClass</PackageTitle>
+        <Description>Just a GitHub Action test package</Description>
+        <PackageProjectUrl>http://www.opensource.org/licenses/mit-license.php</PackageProjectUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <Copyright>Copyright 2021 (c) Sörnt Poppe. All rights reserved.</Copyright>
+        <PackageTags>GitHub Actions</PackageTags>
+        <RepositoryUrl>https://github.com/soernt/GitHubActionPlayground</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        
+        <!-- Versioning -->
+        <PackageVersion>0.1.0</PackageVersion>
+        <Version>0.1.0</Version>
+        <FileVersion>0.1.0</FileVersion>
+    </PropertyGroup>
+
+</Project>
