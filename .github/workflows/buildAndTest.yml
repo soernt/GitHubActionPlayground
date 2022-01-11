@@ -76,7 +76,7 @@ jobs:
     #  run: dotnet publish MyPackage/MyPackage.csproj --output ./output --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: Pack
-      run: dotnet pack -output ./output --configuration Release /p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+      run: dotnet pack --output ./output --configuration Release /p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: 7Zip Package
       run: 7z a -t7z -mx=9 MyPackage.7z ./output/
