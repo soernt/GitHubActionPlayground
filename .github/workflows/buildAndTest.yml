@@ -12,15 +12,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0      
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Restore dependencies
-      run: dotnet restore
+        fetch-depth: 0        
 
     - name: Setup GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.11
@@ -65,9 +57,28 @@ jobs:
         echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
         echo "UncommittedChanges: ${{ steps.gitversion.outputs.uncommittedChanges }}"
         echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"      
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
       
     - name: Build
       run: dotnet build --no-restore
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings MyPackage.Tests/coverlet.runsettings
+      run: dotnet test /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings MyPackage.Tests/coverlet.runsettings
+
+    - name: dotnet publish
+      run: dotnet publish MyPackage/MyPackage.csproj --output ./output --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+
+    - name: 7Zip Package
+      run: 7z a -t7z -mx=9 MyPackage.7z ./output/
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: "MyPackage-${{ steps.gitversion.outputs.fullSemVer }}"
+        path: MyPackage.7z
