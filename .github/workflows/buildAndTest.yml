@@ -58,6 +58,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: MyPackage.7z
-        asset_name: MyPackage.7z
+        asset_name: "MyPackage-${{ steps.gitversion.outputs.nuGetVersionV2 }}"
         tag: "${{ steps.gitversion.outputs.fullSemVer }}"
         overwrite: true
