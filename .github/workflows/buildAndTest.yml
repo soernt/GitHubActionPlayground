@@ -72,13 +72,17 @@ jobs:
     - name: Test
       run: dotnet test /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings MyPackage.Tests/coverlet.runsettings
 
-    - name: dotnet publish
-      run: dotnet publish MyPackage/MyPackage.csproj --output ./output --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+    # - name: dotnet publish
+    #  run: dotnet publish MyPackage/MyPackage.csproj --output ./output --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+
+    - name: Pack
+      run: dotnet pack -output ./output --configuration Release /p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: 7Zip Package
       run: 7z a -t7z -mx=9 MyPackage.7z ./output/
 
     - uses: actions/upload-artifact@v1
       with:
-        name: "MyPackage-${{ steps.gitversion.outputs.fullSemVer }}"
+        name: "MyPackage-${{ steps.gitversion.outputs.nuGetVersionV2 }}"
         path: MyPackage.7z
+
