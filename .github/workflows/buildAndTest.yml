@@ -66,14 +66,14 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
       
-    - name: Build
-      run: dotnet build --no-restore --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+    - name: Build Test version
+      run: dotnet build --no-restore 
       
     - name: Test
       run: dotnet test /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings MyPackage.Tests/coverlet.runsettings
 
-    # - name: dotnet publish
-    #  run: dotnet publish MyPackage/MyPackage.csproj --output ./output --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
+    - name: Build Release version
+      run: dotnet build --no-restore --configuration release /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.Sha }}
 
     - name: Pack
       run: dotnet pack --no-build --output ./output --configuration Release /p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
