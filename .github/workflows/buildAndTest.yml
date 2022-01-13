@@ -19,6 +19,17 @@ jobs:
 
 # --------------------------------------------------------------------------------------------------------
 
+  setup-dotnet:
+    name: Setup .NET
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+# --------------------------------------------------------------------------------------------------------
+
   git-checkout:
     name: Check out the repository
     runs-on: ubuntu-20.04
@@ -57,10 +68,6 @@ jobs:
     needs: 
     - calculate-version
     steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
         
     - name: Restore dependencies
       run: dotnet restore
@@ -72,10 +79,10 @@ jobs:
       run: dotnet test --configuration Release  --verbosity normal --collect:"XPlat Code Coverage" --settings MyPackage.Tests/coverlet.runsettings
 
     - name: Build Release version
-      run: dotnet build --no-restore --configuration Release  /p:AssemblyVersion=${{ needs.calculate-version.outputs.version_assemblySemFileVer }} /p:FileVersion=${{ needs.calculate-version.outputs.version_assemblySemFileVer }} /p:InformationalVersion=${{ needs.calculate-version.outputs.version_sha }}
+      run: dotnet build --no-restore --configuration Release /p:AssemblyVersion=${{ needs.calculate-version.outputs.version_assemblySemFileVer }} /p:FileVersion=${{ needs.calculate-version.outputs.version_assemblySemFileVer }} /p:InformationalVersion=${{ needs.calculate-version.outputs.version_sha }}
 
     - name: Pack
-      run: dotnet pack --output ./output --verbosity normal --configuration Release  --no-restore --include-symbols --include-source -p:PackageVersion={{ needs.calculate-version.outputs.version_nuGetVersionV2 }} src/$PROJECT_NAME/$PROJECT_NAME.*proj
+      run: dotnet pack --output ./output --verbosity normal --configuration Release --no-restore --include-symbols --include-source -p:PackageVersion={{ needs.calculate-version.outputs.version_nuGetVersionV2 }} src/$PROJECT_NAME/$PROJECT_NAME.*proj
 
     - name: Upload Artificat to job
       uses: actions/upload-artifact@v2
