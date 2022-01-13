@@ -45,6 +45,7 @@ jobs:
     name: Calculate Version
     needs: 
     - git-checkout
+    - setup-dotnet
     runs-on: ubuntu-20.04
     outputs:
       version_assemblySemFileVer:  ${{ steps.gitversion.outputs.assemblySemFileVer }}
