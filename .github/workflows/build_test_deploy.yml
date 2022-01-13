@@ -12,7 +12,6 @@ env:
 
   # Official NuGet Feed settings
   NUGET_FEED: https://api.nuget.org/v3/index.json
-  NUGET_KEY: ${{ secrets.NUGET_KEY }}
 
 jobs:
   build_test_deploy:
@@ -53,14 +52,14 @@ jobs:
     - name: Pack
       run: dotnet pack --no-build --output ./output --configuration Release /p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
-    - name: Upload Artificat to job
+    - name: Upload Package to job as artificat
       uses: actions/upload-artifact@v2
       with:
         name: "MyPackage-${{ steps.gitversion.outputs.nuGetVersionV2 }}"
         path: ./output/*.nupkg
 
     - name: Upload Package to release
-      # if: contains(github.ref, 'master')
+      if: contains(github.ref, 'master')
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,5 +69,5 @@ jobs:
         overwrite: true
 
     - name: Upload Package to nuget
-      # if: contains(github.ref, 'master')
+      if: contains(github.ref, 'master')
       run: dotnet nuget push ./output/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key ${{ secrets.NUGET_KEY }}
