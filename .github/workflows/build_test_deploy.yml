@@ -64,8 +64,8 @@ jobs:
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./output/MyPackage.nupkg
-        asset_name: "MyPackage-${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+        file_glob: true
+        file: ./output/*.nupkg
         tag: "${{ steps.gitversion.outputs.fullSemVer }}"
         overwrite: true
 
