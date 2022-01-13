@@ -71,4 +71,4 @@ jobs:
 
     - name: Upload Package to nuget
       # if: contains(github.ref, 'master')
-      run: dotnet nuget push ./output/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key ${{ secrets.NUGET_KEY }}      
+      run: dotnet nuget push ./output/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key ${{ secrets.NUGET_KEY }}
